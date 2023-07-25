@@ -3,17 +3,20 @@
 */
 
 /*
-    Test Cases : repeatStringNumTimes("*", 3) should return the string ***.
-                 repeatStringNumTimes("abc", 3) should return the string abcabcabc.
-                 repeatStringNumTimes("abc", 4) should return the string abcabcabcabc.
-                 repeatStringNumTimes("abc", 1) should return the string abc.
-                 repeatStringNumTimes("*", 8) should return the string ********.
-                 repeatStringNumTimes("abc", -2) should return an empty string ("").
+    Test Cases : repeatStringUsingFor("*", 3) should return the string ***.
+                 repeatStringUsingFor("abc", 3) should return the string abcabcabc.
+                 repeatStringUsingFor("abc", 4) should return the string abcabcabcabc.
+                 repeatStringUsingFor("abc", 1) should return the string abc.
+                 repeatStringUsingFor("*", 8) should return the string ********.
+                 repeatStringUsingFor("abc", -2) should return an empty string ("").
 */
 
 //Beginner Level Solution - Using For Loop, If Condition, and Concatenation of String
 
-function repeatStringNumTimes(str, num) {
+var Benchmark = require('benchmark');
+var suite = new Benchmark.Suite;
+
+function repeatStringUsingFor(str, num) {
     let result = "";
     if(num>0){
       for(let i=0; i<num; i++){
@@ -22,9 +25,21 @@ function repeatStringNumTimes(str, num) {
       return result;
     
     
-  }
-  
-repeatStringNumTimes("abc", 3);
+}
+
+function repeatStringUsingWhile(str, num) {
+    let result = "";
+    let i=0;
+    while (i<num) {
+        result+=str
+        i++;
+    }
+    return result; 
+}
+// console.log(repeatStringUsingWhile("abc",3));
+
+
+// console.log(repeatStringUsingFor("abc", 3));
 // Output - 
 // abcabcabc
 
@@ -33,10 +48,36 @@ repeatStringNumTimes("abc", 3);
 
 // Using Recursion 
 
-function repeatStringNumTimesUsingRecursion(str, num) {
-    return num > 0 ? str + repeatStringNumTimesUsingRecursion(str, num-1) : '';
+function repeatStringUsingRecursion(str, num) {
+    return num > 0 ? str + repeatStringUsingRecursion(str, num-1) : '';
   }
   
-repeatStringNumTimesUsingRecursion("*", 3);
+// repeatStringUsingRecursion("*", 3);
 // Output - 
 // ***
+
+
+suite.add('repeatStringUsingFor', function () {
+    "abc", 3
+})
+
+suite.add('repeatStringUsingWhile', function () {
+    "abc", 3
+})
+
+suite.add('repeatStringUsingRecursion', function () {
+    "abc", 3
+})
+
+
+
+.on('cycle', function(event) {
+    console.log(String(event.target));
+    })
+    
+.on('complete', function() {
+    console.log('Fastest is ' + this.filter('fastest').map('name'));
+    console.log('Slowest is ' + this.filter('slowest').map('name'));
+})
+
+.run({ 'async': true });
